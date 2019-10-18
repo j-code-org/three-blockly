@@ -17,7 +17,7 @@ function snowfall() {
 	}
 
 	var textureLoader = new THREE.TextureLoader();
-	var sprite2 = textureLoader.load( "./examples/textures/sprites/snowflake2.png" );
+	var sprite2 = textureLoader.load( "./three/examples/textures/sprites/snowflake2.png" );
 	var material = new THREE.PointsMaterial({
 		opacity: 0.9,
 		fog: false,

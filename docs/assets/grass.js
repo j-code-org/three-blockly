@@ -3,7 +3,7 @@ function grass() {
   // ground
   var loader = new THREE.TextureLoader();
   
-  var groundTexture = loader.load( '/three/examples/textures/terrain/grasslight-big.jpg' );
+  var groundTexture = loader.load( './three/examples/textures/terrain/grasslight-big.jpg' );
   groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
   groundTexture.repeat.set( 25, 25 );
   groundTexture.anisotropy = 16;
