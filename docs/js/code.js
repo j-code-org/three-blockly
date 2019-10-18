@@ -177,7 +177,7 @@ Code.initLanguage = function(langMenu) {
 // Load the Code demo's language strings.
 document.write('<script src="./msg/msg/' + Code.LANG + '.js"></script>\n');
 // Load Blockly's language strings.
-// document.write('<script src="./msg/js/' + Code.LANG + '.js"></script>\n');
+document.write('<script src="./blockly/msg/js/' + Code.LANG + '.js"></script>\n');
 
 /**
  * Bind a function to a button's click event.
