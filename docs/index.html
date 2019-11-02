@@ -99,8 +99,8 @@
   			<div class="tabs is-right is-marginless">
 					<ul style="height:42px">
             <li>
-              <button onclick="snowfallRun();">
-								SNOW
+              <button onclick="runDemo();">
+								Demo
               </button>
               <button id="runButton">
                 <span class="icon orange600">
@@ -237,45 +237,16 @@ import render from "./assets/scene.mjs"
 <script type="module">
 	import light from "./assets/light.js"
 	THREE.light = light;
+	import Demo from "./assets/demo.mjs"
+	THREE.Demo = Demo;
 </script>
 
-<script>
 //////////////////
 // 手本をうごかす
-
-async function movebox1() {
-	await this.moveForward(5);
-	await this.turnRight(60);
-	await this.moveForward(8);
+<script>
+function runDemo() {
+	THREE.Demo.run();
 }
-async function movebox2() {
-	await this.moveForward(20);
-	await this.turnRight(220);
-	await this.moveForward(12);
-}
-async function snowfallRun() {
-	var box = new THREE.snowfall();
-	THREE.scene.add(box)
-	var box  = new THREE.box();
-	THREE.scene.add(box)
-	movebox2.call(box);
-	var box  = new THREE.box();
-	THREE.scene.add(box)
-	movebox1.call(box);
-	var box = new THREE.pin();
-	THREE.scene.add(box)
-	for (var i=0; i<3; i++) {
-		await box.moveForward(10);
-		await box.turnRight(240);
-	}
-	var box = new THREE.sphere();
-	THREE.scene.add(box)
-	for (var i=0; i<6; i++) {
-		await box.moveForward(30);
-		await box.turnRight(60);
-	}
-}
-
 // ここから開始します。
 $(function(){
 
