@@ -14,6 +14,7 @@ class myClass {
 }
 
 var obj = THREE.Object3D; // THREE !!
+
 // 前に d センチうごかす
 obj.prototype.moveForward = function(d) {
 	var mesh = this;
@@ -21,13 +22,13 @@ obj.prototype.moveForward = function(d) {
   var msec = Math.max(100, Math.abs(d * 100/speed));
   //var highlightBlockId = JCODE.highlightBlockId;
 	//arrow.visible = true;
-	var dir = new THREE.Vector3( 0, 0, 5 );
-	var origin = new THREE.Vector3( 0, 4, 4 );
-	var arrow = new THREE.ArrowHelper( dir, origin, 5, 0xffff00, 2, 1 ); // len=5, color 0xffff00
-	mesh.add(arrow)
 
 	//Code.workspace.highlightBlock(highlightBlockId);
 	return new Promise(function (resolve, reject) {
+		var dir = new THREE.Vector3( 0, 0, 5 );
+		var origin = new THREE.Vector3( 0, 4, 4 );
+		var arrow = new THREE.ArrowHelper( dir, origin, 5, 0xffff00, 2, 1 ); // len=5, color 0xffff00
+		mesh.add(arrow)
 		setTimeout(function(){
 			mesh.remove(arrow);
 			resolve();
@@ -50,8 +51,25 @@ obj.prototype.moveForward = function(d) {
 		.start(); // Start the tween immediately.
 	});
 }
-// 右に d 度まがる
+// 右に d 度まがる(アニメ無し)
 obj.prototype.turnRight = function(d) {
+	var mesh = this;
+	return new Promise(function (resolve, reject) {
+		//全体を右に曲げる
+		var coords2 = mesh.quaternion.clone();
+		var axis = new THREE.Vector4(0, 1, 0, 0);
+		axis.applyMatrix4(mesh.matrix).normalize();
+		var direction = new THREE.Quaternion();
+		direction.setFromAxisAngle(axis, Math.PI * -d / 180).multiply(coords2);
+		mesh.quaternion.copy(direction);
+		setTimeout(function(){
+			resolve();
+		}, 100);
+	});
+}
+
+// 右に d 度まがる
+obj.prototype.turnRight222 = function(d) {
 	var mesh = this;
 	var inner = mesh;
 	var speed = this.speed;

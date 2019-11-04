@@ -100,7 +100,7 @@
 					<ul style="height:42px">
             <li>
               <button onclick="runDemo();">
-								Demo
+								Run
               </button>
               <button id="runButton">
                 <span class="icon orange600">
@@ -108,7 +108,7 @@
                 </span>
                 実行
               </button>
-              <button id="clearButton" title="...">
+              <button id="clearButton" title="..." onclick="reset();">
                 <span class="icon">
                     <i class="fa fa-refresh" aria-hidden="true"></i>
                 </span>
@@ -201,72 +201,82 @@ function highlightBlock(id) {
 }
 </script>
 <script type="module">
-import render from "./assets/scene.mjs"
-	THREE.render = render;
-</script>
-<script type="module">
+	var library = {}
+	import render from "./assets/scene.mjs"
+	library["render"] = render;
 	import snowfall from "./assets/snowfall.js"
-	THREE.snowfall = snowfall;
-</script>
-<script type="module">
-	//import box from "./assets/box.js"
-	//THREE.box = box;
+	library["snowfall"] = snowfall;
 	import box from "./assets/box.mjs"
-	THREE.box = box;
-</script>
-<script type="module">
+	library["box"] = box;
 	import sphere from "./assets/sphere.js"
-	THREE.sphere = sphere;
-</script>
-<script type="module">
+	library["sphere"] = sphere;
 	import pin from "./assets/pin.js"
-	THREE.pin = pin;
-</script>
-<script type="module">
+	library["pin"] = pin;
 	import grass from "./assets/grass.js"
-	THREE.grass = grass;
-</script>
-<script type="module">
+	library["grass"] = grass;
 	import floor from "./assets/floor.js"
-	THREE.floor = floor;
-</script>
-<script type="module">
+	library["floor"] = floor;
 	import skydome from "./assets/skydome.js"
-	THREE.skydome = skydome;
-</script>
-<script type="module">
+	library["skydome"] = skydome;
 	import light from "./assets/light.js"
-	THREE.light = light;
-	import Demo from "./assets/demo.mjs"
-	THREE.Demo = Demo;
+	library["light"] = light;
+	THREE.library = library;
 </script>
 
 //////////////////
 // 手本をうごかす
 <script>
+
 function runDemo() {
-	THREE.Demo.run();
+	var event = new Event('onrun');
+	window.dispatchEvent(event);
+}
+function reset() {
+	var event = new Event('onreset');
+	window.dispatchEvent(event);
 }
 // ここから開始します。
 $(function(){
+	var domElement = document.getElementById("threejs-canvas");
+	var scene = THREE.library["render"](domElement);  // init threejs area
+	scene.add(new THREE.library["grass"]);
+	//scene.add(new THREE.library["floor"]);
+	scene.add(new THREE.library["skydome"]);
+	scene.add(new THREE.library["light"]);
 
-  var domElement = document.getElementById("threejs-canvas");
-	THREE.scene = THREE.render(domElement);  // init threejs area
+	function reset() {
+		var group = new THREE.Group()
+		scene.add(group)
 
-	JCODE.playground = new THREE.Group(); // save global for user play ground;
-	THREE.scene.add(JCODE.playground);
+		THREE.scene = group;
+		$.ajax({
+			type: "GET",
+			url: "./assets/demo.js",
+			dataType: "script",
+			success: function(code){
+				try {
+					//eval("(async () => {" + code + "})()")
+					//eval(code);
+				} catch (e) {
+					alert(e);
+				}
 
+			}
+		});
+		window.addEventListener('onreset', function(e) {
+			console.log("onreset!");
+			scene.remove(group);
+			delete group;
+			reset();
+		}, false);
+	}
 	setTimeout(function() {
-		THREE.scene.add(new THREE.grass())
-		//new THREE.floor(JCODE.scene)
-		THREE.scene.add(new THREE.skydome())
-		THREE.scene.add(new THREE.light())
-		
+		reset();
 		print(`
-		自由にすきなグラフィックスをつくろう！！。<br />
-		下の「リフレッシュ」ボタンを押すと、すべてのオブジェクトをけして、画面をクリアできます。<br />
-		`);
-	}, 100);  
+			自由にすきなグラフィックスをつくろう！！。<br />
+			下の「リフレッシュ」ボタンを押すと、すべてのオブジェクトをけして、画面をクリアできます。<br />
+			`);
+	}, 100);
 });
 
 </script>

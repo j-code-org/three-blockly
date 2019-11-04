@@ -182,9 +182,10 @@ JCODE.object3d = function(shape){
   } else if (typeof shape == "string") {
     config.shape = shape;
   }
-  var group = config.group || "playground";
+  //var group = config.group || "playground";
   var nconfig = {shape:"sphere", color:'#7777ff', speed:1, scale:1, opacity:1, arrow:"during"}; 
-  Object.assign(nconfig, JCODE[group].userData.config, config);
+  //Object.assign(nconfig, JCODE[group].userData.config, config);
+  Object.assign(nconfig, config);
 
   this.outer = {};
   //this.promise = Promise.resolve();
@@ -254,7 +255,7 @@ JCODE.object3d.prototype.loader = function( config ){
   //console.log("config:", config);
   
   var shape = config.shape || 'sphere';
-  var group = config.group || 'playground';
+  //var group = config.group || 'playground';
   var userData = {};
   
   switch(shape) {
@@ -302,7 +303,7 @@ JCODE.object3d.prototype.loader = function( config ){
     var outer = new THREE.Group();
     outer.add(inner);
 
-    JCODE[group].add(outer);
+    //JCODE[group].add(outer);
 
     userData.inner =inner;
     userData.axis = axis;

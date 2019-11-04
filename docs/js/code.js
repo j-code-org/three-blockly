@@ -443,11 +443,12 @@ $(function(){
 //  var domElement = document.getElementById("threejs-canvas");
 //  JCODE.initThreejs(domElement);  // init threejs area
 
-
+/*
   function clearStudentsGroup(){
     JCODE.clearGroup ("playground",{shape:"sphere", color:'#ff0000', speed:1.2, arrow:"during"});
   }
 	$("#clearButton").click(clearStudentsGroup);
+*/
   
   // Blockly の初期化
   Code.initLanguage('languageMenu');
