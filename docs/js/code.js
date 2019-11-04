@@ -227,6 +227,7 @@ Code.renderContent = function() {
     xmlTextarea.focus();
   } else if (content.id == 'content_javascript') {
     var code = Blockly.JavaScript.workspaceToCode(Code.workspace);
+    code = codeReplace(code);
     content.textContent = code;
 
     if (false && (typeof PR.prettyPrintOne == 'function')) {
@@ -356,6 +357,10 @@ Code.initBlockly = function(toolboxText) {
  * Execute the user's code.
  * Just a quick and dirty eval.  Catch infinite loops.
  */
+function codeReplace(code) {
+  var code = code.replace(/function/g,"async function");
+  return code.replace(/async function mathRandomInt/,"function mathRandomInt");
+}
 Code.runJS = function() {
   console.log("Code.runJS");
   Blockly.JavaScript.INFINITE_LOOP_TRAP = '  checkTimeout();\n';
@@ -366,6 +371,7 @@ Code.runJS = function() {
     }
   };
   var code = Blockly.JavaScript.workspaceToCode(Code.workspace);
+  code = codeReplace(code);
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
   try {
     eval("(async () => {" + code + "})()")

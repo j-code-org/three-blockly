@@ -29,10 +29,11 @@ JCODE.three.blocks = {
     dropdown:[
       [ "たま", "sphere" ],
       [ "ぴん", "pin" ],
-      [ "はこ", "box" ]
+      [ "はこ", "box" ],
+      [ "降雪", "snowfall" ]
     ] ,
     code: function(operator, text) {
-      return "var " + operator + " = new THREE." + text + "();\n";
+      return "var " + operator + " = new THREE.library['" + text + "']();\n";
     }
   },
   createNew: {
@@ -40,7 +41,7 @@ JCODE.three.blocks = {
     msg2: "var %1 = new JCODE.object3d( %2 );", 
     colour: 94,
     code: function(operator, text) {
-      return "var " + operator + " = new JCODE.object3d(" + text + ");\n";
+      return "" + operator + " = new THREE.library[" + text + "]();\n";
     }
   },
   setColor: {

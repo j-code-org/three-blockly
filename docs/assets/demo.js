@@ -18,13 +18,13 @@ async function movesphere(obj) {
 		await sphere.turnRight(60);
 	}
 }
-var pin = new THREE.library["pin"];
-THREE.scene.add(pin)
-var box = new THREE.library["box"];
-THREE.scene.add(box)
 
 // Run ボタンのイベント リスナー
 window.addEventListener('onrun', function(e) {
+	var pin = new THREE.library["pin"];
+	THREE.scene.add(pin)
+	var box = new THREE.library["box"];
+	THREE.scene.add(box)
 	movebox(box)
 	movepin(pin);
 	movesphere();
