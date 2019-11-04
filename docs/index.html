@@ -206,8 +206,6 @@ function highlightBlock(id) {
 	library["render"] = render;
 	import snowfall from "./assets/snowfall.js"
 	library["snowfall"] = snowfall;
-	import box from "./assets/box.mjs"
-	library["box"] = box;
 	import sphere from "./assets/sphere.js"
 	library["sphere"] = sphere;
 	import pin from "./assets/pin.js"
@@ -220,6 +218,10 @@ function highlightBlock(id) {
 	library["skydome"] = skydome;
 	import light from "./assets/light.js"
 	library["light"] = light;
+
+	import cube from "./assets/cube.mjs"
+	library["box"] = cube;
+
 	THREE.library = library;
 </script>
 

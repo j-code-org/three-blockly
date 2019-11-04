@@ -1,9 +1,9 @@
 /*
   ピン
 */
-import obj from "./obj.js"
+import movable from "./movable.mjs"
 
-// create a box
+// create a pin
 function loadJson() {
   var jsonobj = 
   {
@@ -138,19 +138,23 @@ function loadJson() {
   var loader = new THREE.ObjectLoader();
   return loader.parse(jsonobj);
 }
-function myMesh() {
-	var mesh = loadJson();
-	var coloredMesh = mesh.getObjectByName("PinCylinder");
-	mesh.castShadow = true;
-	return mesh;
-}
-// define class
-class myClass {
-	constructor(group) {
-		var myobj = new obj(group);
-		myobj.add(new myMesh())
-		return myobj;
-	}
-}
 
-export default myClass;
+function Pin( color ) {
+
+	movable.call( this );
+	if ( color === undefined ) color = 0xffff00;
+	this.mesh = loadJson();
+	this.colordMesh = this.mesh.getObjectByName("PinCylinder");
+  this.add( this.mesh );
+	this.mesh.castShadow = true;
+
+}
+Pin.prototype = Object.create( movable.prototype );
+Pin.prototype.constructor = Pin;
+// 色を変える
+Pin.prototype.setColor = function ( color ) {
+	this.colordMesh.material.color.set( color );
+};
+
+export default Pin;
+

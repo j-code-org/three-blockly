@@ -1,25 +1,27 @@
 /*
   たま
 */
-import obj from "./obj.js"
+import movable from "./movable.mjs"
 
-// create a Sphere
-function myMesh() {
+// create a box
+function Sphere( color ) {
+
+	movable.call( this );
+	if ( color === undefined ) color = 0xffff00;
+
 	var sphereGeometry = new THREE.SphereGeometry(2, 20, 20);
-	var material = new THREE.MeshLambertMaterial({color: 0x7777ff});
-	var mesh = new THREE.Mesh(sphereGeometry, material);
-	mesh.position.y = 2;
-	mesh.castShadow = true;
-	return mesh;
-}
-// define class
-class myClass {
-	constructor(group) {
-		var myobj = new obj(group);
-		myobj.add(new myMesh())
-		return myobj;
-	}
-}
+	var material = new THREE.MeshLambertMaterial({color: color});
+	this.mesh = new THREE.Mesh(sphereGeometry, material);
+  this.add( this.mesh );
+  this.mesh.position.y = 2;
+	this.mesh.castShadow = true;
 
-export default myClass;
+}
+Sphere.prototype = Object.create( movable.prototype );
+Sphere.prototype.constructor = Sphere;
+// 色を変える
+Sphere.prototype.setColor = function ( color ) {
+	this.mesh.material.color.set( color );
+};
 
+export default Sphere;

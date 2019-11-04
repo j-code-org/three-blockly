@@ -359,7 +359,8 @@ Code.initBlockly = function(toolboxText) {
  */
 function codeReplace(code) {
   var code = code.replace(/function/g,"async function");
-  return code.replace(/async function mathRandomInt/,"function mathRandomInt");
+  code = code.replace(/async function mathRandomInt/,"function mathRandomInt");
+  return code.replace(/async function colourRandom/,"function colourRandom");
 }
 Code.runJS = function() {
   console.log("Code.runJS");

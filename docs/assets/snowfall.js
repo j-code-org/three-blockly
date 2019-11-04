@@ -1,13 +1,13 @@
 /*
   降雪モジュール  
-  Need ojects:
-    THREE
-    JCODE
 */
-import obj from "./obj.js"
 
+import movable from "./movable.mjs"
+
+// create a box
 function snowfall() {
 
+	movable.call( this );
 	var geometry = new THREE.Geometry();
 	var vertex = new THREE.Vector3(0, 0, 0);
 	geometry.vertices.push( vertex );
@@ -27,7 +27,8 @@ function snowfall() {
 	});
 	material.color.setHSL( 0.95, 0, 0.8 );
 
-	var particles = new THREE.Points( geometry, material );
+	this.particles = new THREE.Points( geometry, material );
+	this.add( this.particles );
 
 	function random2(base, spread) {
 		return base + ((Math.random() - 0.5) * spread);
@@ -65,16 +66,8 @@ function snowfall() {
 	}
 	setInterval(velocity, 30);
 	setInterval(render, 20);
-	return particles;
 }
+snowfall.prototype = Object.create( movable.prototype );
+snowfall.prototype.constructor = snowfall;
 
-// define class
-class myClass {
-	constructor(group) {
-		var myobj = new obj(group);
-		myobj.add(new snowfall())
-		return myobj;
-	}
-}
-
-export default myClass;
+export default snowfall;
