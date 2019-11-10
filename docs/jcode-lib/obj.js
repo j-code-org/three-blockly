@@ -86,7 +86,7 @@ JCODE.createBlock = function(obj, prefix, funcname, color) {
   Blockly.JavaScript[blockid] = function(block) {
     var text = Blockly.JavaScript.valueToCode(block, 'VALUE',
     Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
-    var operator = this.getFieldValue('VAR');
+    var operator = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
     var subString = "substr";
     //console.log(text);
     var code = obj[funcname].code(operator, text);

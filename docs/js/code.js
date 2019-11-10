@@ -252,7 +252,7 @@ Code.initBlockly = function(toolboxText) {
   // TODO: Clean up the message files so this is done explicitly instead of
   // through this for-loop.
   for (var messageKey in MSG) {
-    if (goog.string.startsWith(messageKey, 'cat')) {
+    if (messageKey.indexOf('cat') == 0) {
       Blockly.Msg[messageKey.toUpperCase()] = MSG[messageKey];
     }
   }

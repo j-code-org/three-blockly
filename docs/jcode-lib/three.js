@@ -37,7 +37,7 @@ JCODE.three.blocks = {
     }
   },
   createNew: {
-    msg: "%1 は新しい %2", 
+    msg: "%1 ＝ 新しい %2", 
     msg2: "var %1 = new JCODE.object3d( %2 );", 
     colour: 94,
     code: function(operator, text) {
@@ -155,8 +155,8 @@ if (true) {
     if (obj[p].dropdown) {
       JCODE.createDropdown(obj, prefix, p, 76);
     } else if (obj[p].angle) {
-        JCODE.createAngle(obj, prefix, p, 76);
-     } else {
+      JCODE.createAngle(obj, prefix, p, 76);
+    } else {
       JCODE.createBlock(obj, prefix, p, 76);
     }
   }              
