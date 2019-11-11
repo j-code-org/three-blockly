@@ -16,16 +16,19 @@
  * 
  */
 JCODE.three = {};
+var ParameterHue = 191;
+var MovableHue = "#00A51B";//130 1.-.60;
+var EventHue = "#6C8B9A";//200 .30-.60;
 
 JCODE.three.blocks = {
   angle: {
     msg: "", 
     angle: 90 ,
-    colour: 191
+    colour: ParameterHue
   },
   typeName: {
     msg: "", 
-    colour: 191,
+    colour: ParameterHue,
     dropdown:[
       [ "たま", "sphere" ],
       [ "ぴん", "pin" ],
@@ -36,10 +39,27 @@ JCODE.three.blocks = {
       return "var " + operator + " = new THREE.library['" + text + "']();\n";
     }
   },
+  beginBlock: {
+    msg: "最初だけ", 
+    eventName: "beginBlock",
+    colour: EventHue,
+    code: function(branch) {
+      return "// さいしょだけ\n" + branch;
+    }
+  },
+  disableBlock: {
+    msg: "無効", 
+    eventName: "disableBlock",
+    colour: EventHue,
+    code: function(branch) {
+      return "// 無効です！\n"+
+      'function dummy() {\n' + branch + '}\n';
+    }
+  },
   createNew: {
     msg: "%1 ＝ 新しい %2", 
     msg2: "var %1 = new JCODE.object3d( %2 );", 
-    colour: 94,
+    colour: MovableHue,
     code: function(operator, text) {
       return "" + operator + " = new THREE.library[" + text + "]();\n";
     }
@@ -108,7 +128,7 @@ JCODE.three.blocks = {
     }
   }
 };
-
+// Toolbox
 if (true) {
   // CUSTOM toolbox
   JCODE.three.toolbox = function(workspace) {
@@ -147,20 +167,46 @@ if (true) {
   };
 
 }
-
+// Block 定義
 (function() {
   var prefix = "three_";
   var obj = JCODE.three.blocks;
   for (var p in obj) {
     if (obj[p].dropdown) {
-      JCODE.createDropdown(obj, prefix, p, 76);
+      JCODE.createDropdown(obj, prefix, p, MovableHue);
     } else if (obj[p].angle) {
-      JCODE.createAngle(obj, prefix, p, 76);
+      JCODE.createAngle(obj, prefix, p, MovableHue);
+    } else if (obj[p].eventName) {
+      createEvent(obj[p], prefix, p, obj[p].colour);
     } else {
-      JCODE.createBlock(obj, prefix, p, 76);
+      JCODE.createBlock(obj, prefix, p, MovableHue);
     }
   }              
 })();
+
+function createEvent(obj, prefix, funcname, colour) {
+  var blockid = prefix + funcname;
+  Blockly.Blocks[blockid] = {
+    init: function() {
+      this.jsonInit({
+        "message0": obj.msg + "%1",
+        "args0": [
+          {"type": "input_dummy" }
+        ],
+        "message1": "%1",
+        "args1": [
+          {"type": "input_statement", "name": "DO"}
+        ],
+        "nextStatement": null,
+        "colour": colour
+      });
+    }
+  };
+  Blockly.JavaScript[blockid] = function(block) {
+    var branch = Blockly.JavaScript.statementToCode(block, 'DO');
+    return obj.code(branch);
+  };
+}
 
 /*
 * Three オブジェクト拡張

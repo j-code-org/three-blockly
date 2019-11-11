@@ -239,6 +239,9 @@ function reset() {
 }
 // ここから開始します。
 $(function(){
+
+	Blockly.HSV_SATURATION = 0.95; // 0 (inclusive) to 1 (exclusive), defaulting to 0.45
+	Blockly.HSV_VALUE = 0.80; // 0 (inclusive) to 1 (exclusive), defaulting to 0.65
 	var domElement = document.getElementById("threejs-canvas");
 	var scene = THREE.library["render"](domElement);  // init threejs area
 	scene.add(new THREE.library["grass"]);
@@ -582,7 +585,7 @@ $(function(){
 	<category name="%{BKY_CATFUNCTIONS}" colour="%{BKY_PROCEDURES_HUE}" custom="PROCEDURE"></category>
 		
 	<sep></sep>
-	<category name="3Dオブジェクト" colour="#abcc52">
+	<category name="3Dオブジェクト" colour="#00A51B">
 		<block type="three_createNew">
 			<field name="VAR"  variabletype="">obj</field>
 			<value name="VALUE">
@@ -625,7 +628,7 @@ $(function(){
 			</value>
 		</block>		
 	</category>
-	<category name="3Dオブジェクト(一覧)" colour="#abcc52" custom="JCODE_THREE"></category>
+	<category name="3Dオブジェクト(一覧)" colour="#00A51B" custom="JCODE_THREE"></category>
 </xml>
 
 </body>
