@@ -175,7 +175,7 @@ Code.initLanguage = function(langMenu) {
 }
 
 // Load the Code demo's language strings.
-document.write('<script src="./msg/msg/' + Code.LANG + '.js"></script>\n');
+document.write('<script src="./blockly/msg2/' + Code.LANG + '.js"></script>\n');
 // Load Blockly's language strings.
 document.write('<script src="./blockly/msg/js/' + Code.LANG + '.js"></script>\n');
 
@@ -239,74 +239,6 @@ Code.renderContent = function() {
 };
 
 /**
- * @fileoverview Classic theme.
- * Contains multi-coloured border to create shadow effect.
- */
-var defaultBlockStyles = {
-  "colour_blocks": {
-    "colourPrimary": "20"
-  },
-  "list_blocks": {
-    "colourPrimary": "260"
-  },
-  "logic_blocks": {
-    "colourPrimary": "#2693FF"  //"210".85-1
-  },
-  "loop_blocks": {
-    "colourPrimary": "#FF26B7"  //320".85-1
-  },
-  "math_blocks": {
-    "colourPrimary": "#0A2BCD"  //"230"
-  },
-  "procedure_blocks": {
-    "colourPrimary": "#DC26FF" //"290".85-1
-  },
-  "text_blocks": {
-    "colourPrimary": "160"
-  },
-  "variable_blocks": {
-    "colourPrimary": "#CD0A6C" //"330".85-1
-  },
-  "variable_dynamic_blocks": {
-    "colourPrimary": "310"
-  },
-  "hat_blocks": {
-    "colourPrimary": "330",
-    "hat": "cap"
-  }
-};
-
-var categoryStyles = {
-  "colour_category": {
-    "colour": "20"
-  },
-  "list_category": {
-    "colour": "260"
-  },
-  "logic_category": {
-    "colour": "210"
-  },
-  "loop_category": {
-    "colour": "280" //"120"
-  },
-  "math_category": {
-    "colour": "230"
-  },
-  "procedure_category": {
-    "colour": "290"
-  },
-  "text_category": {
-    "colour": "160"
-  },
-  "variable_category": {
-    "colour": "330"
-  },
-  "variable_dynamic_category": {
-    "colour": "310"
-  }
-};
-
-/**
  * Initialize Blockly.  Called on page load.
  */
 Code.initBlockly = function(toolboxText) {
@@ -324,6 +256,75 @@ Code.initBlockly = function(toolboxText) {
       Blockly.Msg[messageKey.toUpperCase()] = MSG[messageKey];
     }
   }
+
+  /**
+ * @fileoverview Classic theme.
+ * Contains multi-coloured border to create shadow effect.
+ */
+var defaultBlockStyles = {
+  "colour_blocks": {
+    "colourPrimary": Blockly.Msg["COLOUR_HUE"]
+  },
+  "list_blocks": {
+    "colourPrimary": Blockly.Msg["LISTS_HUE"]
+  },
+  "logic_blocks": {
+    "colourPrimary": Blockly.Msg["LOGIC_HUE"]
+  },
+  "loop_blocks": {
+    //"colourPrimary": "#FF26B7"  //320".85-1
+    "colourPrimary": Blockly.Msg["LOOPS_HUE"]
+  },
+  "math_blocks": {
+    "colourPrimary": Blockly.Msg["MATH_HUE"]
+  },
+  "procedure_blocks": {
+    "colourPrimary": Blockly.Msg["PROCEDURES_HUE"]
+  },
+  "text_blocks": {
+    "colourPrimary": Blockly.Msg["TEXTS_HUE"]
+  },
+  "variable_blocks": {
+    "colourPrimary": Blockly.Msg["VARIABLES_HUE"]
+  },
+  "variable_dynamic_blocks": {
+    "colourPrimary": Blockly.Msg["VARIABLES_DYNAMIC_HUE"]
+  },
+  "hat_blocks": {
+    "colourPrimary": "330",
+    "hat": "cap"
+  }
+};
+
+var categoryStyles = {
+  "colour_category": {
+    "colour": "20"
+  },
+  "list_category": {
+    "colour": "260"
+  },
+  "logic_category": {
+    "colour": Blockly.Msg["LOGIC_CATEGORY_HUE"]
+  },
+  "loop_category": {
+    "colour": Blockly.Msg["LOOPS_CATEGORY_HUE"]
+  },
+  "math_category": {
+    "colour": "230"
+  },
+  "procedure_category": {
+    "colour": "290"
+  },
+  "text_category": {
+    "colour": "160"
+  },
+  "variable_category": {
+    "colour": "330"
+  },
+  "variable_dynamic_category": {
+    "colour": "310"
+  }
+};
 
   var toolboxXml = Blockly.Xml.textToDom(toolboxText);
   Code.workspace = Blockly.inject('content_blocks',

@@ -17,8 +17,8 @@
  */
 JCODE.three = {};
 var ParameterHue = 191;
-var MovableHue = "#00A51B";//130 1.-.60;
-var EventHue = "#6C8B9A";//200 .30-.60;
+var MovableHue = Blockly.Msg["MOVABLES_HUE"]; //"#00A51B";//130 1.-.60;
+var EventHue = Blockly.Msg["EVENTS_HUE"]; //"#6C8B9A";//200 .30-.60;
 
 JCODE.three.blocks = {
   angle: {
