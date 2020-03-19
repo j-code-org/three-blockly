@@ -430,6 +430,7 @@ var categoryStyles = {
 function codeReplace(code) {
   var code = code.replace(/function/g,"async function");
   code = code.replace(/async function mathRandomInt/g,"function mathRandomInt");
+  code = code.replace(/async function colourRgb/g,"function colourRgb");
   return code.replace(/async function colourRandom/g,"function colourRandom");
 }
 Code.runJS = function() {
