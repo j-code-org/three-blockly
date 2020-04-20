@@ -2,7 +2,7 @@
 カメラ、レンダラー
 シーンを作って返す
 */
-function initThreejs(domElement) {
+function render(domElement) {
 
   // create a scene, that will hold all our elements such as objects, cameras and lights.
   var scene = new THREE.Scene();
@@ -46,4 +46,4 @@ function initThreejs(domElement) {
   return scene;
 }
 
-export default initThreejs;
+export default render;

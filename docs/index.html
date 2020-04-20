@@ -20,14 +20,13 @@
 	<script src="./three/examples/js/controls/OrbitControls.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
 
-  <!-- jcode ext -->
+	<!-- jcode ext -->
 	<script src="./jcode-lib/TextBoardObject.js"></script>
 	<script src="./js/code.js"></script>
 	<script src="./js/jcode.js"></script>
 	<script src="./jcode-lib/obj.js"></script>
 	<script src="./jcode-lib/three.js"></script>
 	<script src="./jcode-lib/instructions.js"></script>
-
 </head>
 <body>
 	<audio id="boyoyon1" preload="auto">
@@ -37,7 +36,7 @@
 	<nav id="top_nav" class="navbar is-info">
 		<div class="navbar-brand">
 			<span class="nav-item is-size-4-desktop" href="/" id="title">
-				プログラミング教育研究所
+				プログラミング教育研究所 (v0.1.1-dev)
 			</span>
 			<button class="button navbar-burger" data-target="navMenu">
 				<span></span>
@@ -56,25 +55,12 @@
 
 	<section class="tile is-ancestor is-vertical" style="margin-top:-9px;background:#EFEFEF">
 		<div class="tile is-parent is-primary" style="margin:4px;">
-
 			<article class="tile is-child is-6" style="height:300px;" id="threejs_win" >
 				<div id="threejs-canvas" style="width:100%;height:100%;margin:0px;overflow:hidden;" >
 				</div>
-				<div id="WebGL-ui">
-						<div id="vr-button"></div>
-						<a id="magic-window" href="#" class="balloon" style="display: none">>
-							はじめ
-						</a>
-				</div>
 			</article>					
-      <section class="tile is-vertical" style="margin:4px;">
-        
-        <article class="tile is-child is-primary" style="background:#DBDBDB" id="instruction-canvas">
-        </article>
-        <article class="tile is-child is-primary">
-            <input input class="input is-info" id="inputMessage" type="text" placeholder="Type here..."/>
-        </article>
-      </section>
+			<section class="tile is-vertical" style="margin:4px;">
+			</section>
 		</div>
 		<div class="tile is-parent is-primary is-paddingless" style="background:#FFF">
 			<article class="tile is-child is-primary">
@@ -88,61 +74,56 @@
 				</div>
 			</article>
 			<article class="tile is-child is-primary">
-        <div class="control">
-          <div class="select">
-            <select id="programMenu">
-            </select>
-          </div>
-        </div>
-      </article>
-      <article class="tile is-child is-primary">
-  			<div class="tabs is-right is-marginless">
-					<ul style="height:42px">
-            <li>
-              <button onclick="runDemo();">
-								Run
-              </button>
-              <button id="runButton">
-                <span class="icon orange600">
-                    <i class="fa fa-play-circle " aria-hidden="true"></i>
-                </span>
-                実行
-              </button>
-              <button id="clearButton" title="..." onclick="reset();">
-                <span class="icon">
-                    <i class="fa fa-refresh" aria-hidden="true"></i>
-                </span>
-                 リフレッシュ
-              </button>
-              <button id="sendCode" class="notext" title="...">
-                <span class="icon">
-                    <i class="fa fa-share" aria-hidden="true"></i>
-                </span>
-                プログラム送信
-              </button>
-              <button id="linkButton" class="notext" title="...">
-                <span class="icon">
-                  <i class="fa fa-sign-in" aria-hidden="true"></i>
-                </span>
-              </button>
-              <button id="trashButton" class="notext" title="...">
-                <span class="icon has-text-danger">
-                  <i class="fa fa-trash-o" aria-hidden="true"></i>
-                </span>
-              </button>
-            </li>
-					</ul>
+				<div class="control">
+					<div class="select">
+					<select id="programMenu">
+					</select>
+					</div>
+				</div>
+      		</article>
+			<article class="tile is-child is-primary">
+				<div class="tabs is-right is-marginless">
+				<ul style="height:42px">
+					<li>
+						<button id="runButton">
+						<span class="icon orange600">
+							<i class="fa fa-play-circle " aria-hidden="true"></i>
+						</span>
+						実行
+						</button>
+						<button id="clearButton" title="..." onclick="reset();">
+						<span class="icon">
+							<i class="fa fa-refresh" aria-hidden="true"></i>
+						</span>
+							リセット
+						</button>
+						<button id="sendCode" class="notext" title="...">
+						<span class="icon">
+							<i class="fa fa-share" aria-hidden="true"></i>
+						</span>
+						プログラム送信
+						</button>
+						<button id="linkButton" class="notext" title="...">
+						<span class="icon">
+							<i class="fa fa-sign-in" aria-hidden="true"></i>
+						</span>
+						</button>
+						<button id="trashButton" class="notext" title="...">
+						<span class="icon has-text-danger">
+							<i class="fa fa-trash-o" aria-hidden="true"></i>
+						</span>
+						</button>
+					</li>
+				</ul>
 				</div>
 			</article>
 		</div>
 		<div class="tile is-parent is-primary is-paddingless">
-					
-				<div id="content_area" style="position:relative;width:100%;height:300px;"> 	<!-- important -->
-					<div id="content_blocks" class="content"></div>
-					<pre id="content_javascript" class="content"></pre>
-					<textarea id="content_xml" class="content" wrap="off"></textarea>
-				</div>
-
+			<div id="content_area" style="position:relative;width:100%;height:300px;"> 	<!-- important -->
+				<div id="content_blocks" class="content"></div>
+				<pre id="content_javascript" class="content"></pre>
+				<textarea id="content_xml" class="content" wrap="off"></textarea>
+			</div>
 		</div>
 	</section>
 
@@ -170,29 +151,6 @@
      </div>
   </div>
 <script>
-// 画面の大きさを調整する
-$(document).ready(function() {
-  var wh = $(window).height();
-  var nh = $("#top_nav").height();
-  var th = $("#threejs_win").height();
-  var ph = $("#middle_pannel").height();
-  //var eh = $("#content_area").height();
-  var rh = wh - nh - th - ph - 39;
-  rh = Math.max(100, rh);
-  console.log(rh);
-
-  $("#content_area").height(rh);
-  JCODE.resizeEvent();
-  $("#content_area").funcResizeBox({ });
-  $('#threejs_win').funcResizeBox({ });
-});
-
-
-// html インストラクションを追加して、一番下にスクロールする
-function print(h) {
-  //$("#instructions").append($("<p class='balloon2' />").html(h));
-  //$('#instructions').animate({scrollTop: $('#instructions')[0].scrollHeight}, 'fast');
-}
 
 // 現在実行中のブロックをハイライトする
 function highlightBlock(id) {
@@ -202,12 +160,14 @@ function highlightBlock(id) {
 </script>
 <script type="module">
 	var library = {}
-	import render from "./assets/scene.mjs"
-	library["render"] = render;
-	import snowfall from "./assets/snowfall.js"
-	library["snowfall"] = snowfall;
-	import sphere from "./assets/sphere.js"
-	library["sphere"] = sphere;
+	//import render from './assets/scene.mjs'
+	//library["render"] = render;
+
+	//import snowfall from "./assets/snowfall.js"
+	//library["snowfall"] = snowfall;
+	//import sphere from "./assets/sphere.js"
+	//library["sphere"] = sphere;
+/*
 	import pin from "./assets/pin.js"
 	library["pin"] = pin;
 	import grass from "./assets/grass.js"
@@ -223,68 +183,96 @@ function highlightBlock(id) {
 	library["box"] = cube;
 
 	THREE.library = library;
+*/
 </script>
 
-//////////////////
-// 手本をうごかす
 <script>
 
-function runDemo() {
-	var event = new Event('onrun');
-	window.dispatchEvent(event);
-}
+// 「RESET」イベント
 function reset() {
-	var event = new Event('onreset');
-	window.dispatchEvent(event);
+	window.dispatchEvent(new Event('onreset'));
 }
-// ここから開始します。
-$(function(){
 
+const projectJson = {
+	modules: [
+	{name: "render", path: "./assets/scene.mjs"},
+	{name: "snowfall", path: "./assets/snowfall.js"},
+	{name: "sphere", path: "./assets/sphere.js"},
+	{name: "pin", path: "./assets/pin.js"},
+	{name: "grass", path: "./assets/grass.js"},
+	{name: "floor", path: "./assets/floor.js"},
+	{name: "skydome", path: "./assets/skydome.js"},
+	{name: "light", path: "./assets/light.js"},
+	{name: "box", path: "./assets/cube.mjs"},
+	]
+}
+
+async function loadThreeModules() {
+	console.log("load!");
 	Blockly.HSV_SATURATION = 0.95; // 0 (inclusive) to 1 (exclusive), defaulting to 0.45
 	Blockly.HSV_VALUE = 0.80; // 0 (inclusive) to 1 (exclusive), defaulting to 0.65
 	var domElement = document.getElementById("threejs-canvas");
+
+	THREE.library = {};
+	for (var i=0; i < projectJson.modules.length; i++) {
+		console.log("module:", projectJson.modules[i].name);
+		var module1 = await import(projectJson.modules[i].path);
+		THREE.library[projectJson.modules[i].name] = module1.default;		
+	}
+	
+	var scene = THREE.library["render"](domElement);
+	scene.add(new THREE.library["grass"]);
+	//scene.add(new THREE.library["floor"]);
+	scene.add(new THREE.library["skydome"]);
+	scene.add(new THREE.library["light"]);
+
+	function redrawCanvas() {
+		var group = new THREE.Group()
+		scene.add(group)
+
+		THREE.scene = group;
+		window.addEventListener('onreset', function(e) {
+			console.log("onreset!");
+			scene.remove(group);
+			delete group;
+			redrawCanvas();
+		}, false);
+	}
+	setTimeout(function() {
+		redrawCanvas();
+	}, 100);
+}
+
+// Three 描画エリアの初期化
+window.addEventListener('load', function() {
+	loadThreeModules();
+/*
 	var scene = THREE.library["render"](domElement);  // init threejs area
 	scene.add(new THREE.library["grass"]);
 	//scene.add(new THREE.library["floor"]);
 	scene.add(new THREE.library["skydome"]);
 	scene.add(new THREE.library["light"]);
 
-	function reset() {
+	function redrawCanvas() {
 		var group = new THREE.Group()
 		scene.add(group)
 
 		THREE.scene = group;
-		$.ajax({
-			type: "GET",
-			url: "./assets/demo.js",
-			dataType: "script",
-			success: function(code){
-				try {
-					//eval("(async () => {" + code + "})()")
-					//eval(code);
-				} catch (e) {
-					alert(e);
-				}
-
-			}
-		});
 		window.addEventListener('onreset', function(e) {
 			console.log("onreset!");
 			scene.remove(group);
 			delete group;
-			reset();
+			redrawCanvas();
 		}, false);
 	}
 	setTimeout(function() {
-		reset();
-		print(`
-			自由にすきなグラフィックスをつくろう！！。<br />
-			下の「リフレッシュ」ボタンを押すと、すべてのオブジェクトをけして、画面をクリアできます。<br />
-			`);
+		redrawCanvas();
 	}, 100);
-});
+*/
+})
 </script>
 
+<!-- ブロック メニュー -->
 <xml id="toolbox_all" style="display: none">
 	<category name="%{BKY_CATLOGIC}" colour="%{BKY_LOGIC_HUE}">
 		<block type="controls_if"></block>

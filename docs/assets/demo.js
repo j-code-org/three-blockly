@@ -2,6 +2,31 @@
   Demo
 */
 
+/*
+ $.ajax({
+	type: "GET",
+	url: "./assets/demo.js",
+	dataType: "script",
+	success: function(code){
+		try {
+			//eval("(async () => {" + code + "})()")
+			//eval(code);
+		} catch (e) {
+			alert(e);
+		}
+
+	}
+});
+	<button onclick="runDemo();">
+					Run
+	</button>
+// 「実行」イベント
+function runDemo() {
+	var event = new Event('onrun');
+	window.dispatchEvent(event);
+}
+*/
+
 // Run ボタンのイベント リスナー
 window.addEventListener('onrun', function(e) {
 	var obj, x;
