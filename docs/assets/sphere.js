@@ -1,7 +1,7 @@
 /*
   たま
 */
-import movable from "./movable.mjs"
+import movable from "./movable.js"
 
 // create a box
 function Sphere( color ) {
