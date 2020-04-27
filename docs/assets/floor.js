@@ -1,5 +1,5 @@
 // 床を書く
-function createFloor(scene) {
+function createFloor() {
 
   var floor = new THREE.Group();
   var planeGeometry = new THREE.PlaneGeometry(10, 10);
@@ -26,8 +26,13 @@ function createFloor(scene) {
       floor.add(p);
     }
   }
-  scene.add(floor)
-  return this;
+  return floor;
 }
 
-export default createFloor;
+class myClass {
+	constructor() {
+		return createFloor();
+	}
+}
+
+export default myClass

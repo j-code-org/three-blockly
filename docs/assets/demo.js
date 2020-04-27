@@ -2,33 +2,7 @@
   Demo
 */
 
-/*
- $.ajax({
-	type: "GET",
-	url: "./assets/demo.js",
-	dataType: "script",
-	success: function(code){
-		try {
-			//eval("(async () => {" + code + "})()")
-			//eval(code);
-		} catch (e) {
-			alert(e);
-		}
-
-	}
-});
-	<button onclick="runDemo();">
-					Run
-	</button>
-// 「実行」イベント
-function runDemo() {
-	var event = new Event('onrun');
-	window.dispatchEvent(event);
-}
-*/
-
-// Run ボタンのイベント リスナー
-window.addEventListener('onrun', function(e) {
+function demo() {
 	var obj, x;
 
 	function colourRandom() {
@@ -71,4 +45,15 @@ window.addEventListener('onrun', function(e) {
 		obj = new THREE.library["snowfall"]();
 		THREE.scene.add (obj);
 	}
+}
+// Run ボタンのイベント リスナー
+window.addEventListener('onrun', function(e) {
+	demo();
+	return;
 }, false);
+
+function init() {
+	return;
+}
+export default init;
+

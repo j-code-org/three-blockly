@@ -2,6 +2,7 @@
   jcode ver 0.0.1
 */
 // resize window
+/*
 (function($){ 
   $.fn.funcResizeBox = function(userOptions) {
     var elements = this;
@@ -126,6 +127,7 @@
     return(this);
   };
 })(jQuery);
+*/
 
 /**
  * Create a namespace for the application.

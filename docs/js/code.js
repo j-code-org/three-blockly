@@ -348,7 +348,7 @@ var categoryStyles = {
 
   // カスタムツールボックス
   Code.workspace.registerToolboxCategoryCallback('JCODE_THREE', JCODE.three.toolbox);
-  Code.workspace.registerToolboxCategoryCallback('JCODE_INSTRUCTION', JCODE.jcodeInstractionCallback);
+  //Code.workspace.registerToolboxCategoryCallback('JCODE_INSTRUCTION', JCODE.jcodeInstractionCallback);
   
   // Add to reserved word list: Local variables in execution environment (runJS)
   // and the infinite loop detection function.
@@ -452,6 +452,10 @@ Code.runJS = function() {
     alert(MSG['badCode'].replace('%1', e));
   }
 };
+// onrun イベントによる実行
+window.addEventListener('onrun', function(e) {
+  Code.runJS ();
+}, false);
 
 /**
  * Discard all blocks from the workspace.
@@ -499,45 +503,3 @@ Code.loadBlocks = function(defaultXml) {
   }
 }
 */
-
-// 初期化
-$(function(){
-	console.log("All resources finished loading!");
-  // Init html buttons
-  Code.bindClick('trashButton', function() {Code.discard(); Code.renderContent();});
-  //function() {JCODE.removeAllFromPlayground()});
-  Code.bindClick('runButton', Code.runJS);
-    
-  // Inject language strings.
-  document.title += ' ' + MSG['title'];
-  document.getElementById('title').textContent = MSG['title'];
-  document.getElementById('tab_blocks').textContent = MSG['blocks'];
-
-  document.getElementById('linkButton').title = MSG['linkTooltip'];
-  document.getElementById('runButton').title = MSG['runTooltip'];
-  document.getElementById('trashButton').title = MSG['trashTooltip'];
-
-  // Three.js 初期化
-//  var domElement = document.getElementById("threejs-canvas");
-//  JCODE.initThreejs(domElement);  // init threejs area
-
-/*
-  function clearStudentsGroup(){
-    JCODE.clearGroup ("playground",{shape:"sphere", color:'#ff0000', speed:1.2, arrow:"during"});
-  }
-	$("#clearButton").click(clearStudentsGroup);
-*/
-  
-  // Blockly の初期化
-  Code.initLanguage('languageMenu');
-	Code.initBlockly($('#toolbox_all').prop('outerHTML'));  // Blockly の初期化
-
-  // インストラクションエリアを初期化する
-  //$("#instruction-canvas").html("<div id='instructions' style='width:100%;height:300px;overflow-y:scroll;'></div>");
-  $("#instruction-canvas").html("<div id='instructions' style='width:100%;height:250px;overflow-y:scroll;'></div>");
-  
-  // project 初期化
-  JCODE.projectInit();
-    
-});
-
