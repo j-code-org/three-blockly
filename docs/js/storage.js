@@ -1,24 +1,4 @@
 /**
- * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
  * @fileoverview Loading and saving blocks with localStorage and cloud storage.
  * @author q.neutron@gmail.com (Quynh Neutron)
  */
@@ -27,170 +7,241 @@
 // Create a namespace.
 var BlocklyStorage = {};
 
-/**
- * Backup code blocks to localStorage.
- * @param {!Blockly.WorkspaceSvg} workspace Workspace.
- * @private
- */
-BlocklyStorage.backupBlocks_ = function(workspace) {
-  if ('localStorage' in window) {
-    var xml = Blockly.Xml.workspaceToDom(workspace);
-    // Gets the current URL, not including the hash.
-    var url = window.location.href.split('#')[0];
-    window.localStorage.setItem(url, Blockly.Xml.domToText(xml));
-    console.log("backup:", url);
-  }
-};
-
-/**
- * Bind the localStorage backup function to the unload event.
- * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
- */
-BlocklyStorage.backupOnUnload = function(opt_workspace) {
-  var workspace = opt_workspace || Blockly.getMainWorkspace();
-  window.addEventListener('unload',
-      function() {BlocklyStorage.backupBlocks_(workspace);}, false);
-};
-
-/**
- * Restore code blocks from localStorage.
- * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
- */
-BlocklyStorage.restoreBlocks = function(opt_workspace) {
-  var url = window.location.href.split('#')[0];
-  if ('localStorage' in window && window.localStorage[url]) {
-    var workspace = opt_workspace || Blockly.getMainWorkspace();
-    var xml = Blockly.Xml.textToDom(window.localStorage[url]);
-    Blockly.Xml.domToWorkspace(xml, workspace);
-    console.log("restore:", url);
-  }
-};
-
-/**
- * Save blocks to database and return a link containing key to XML.
- * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
- */
-BlocklyStorage.link = function(opt_workspace) {
-  var workspace = opt_workspace || Blockly.getMainWorkspace();
-  var xml = Blockly.Xml.workspaceToDom(workspace);
-  var data = Blockly.Xml.domToText(xml);
-  BlocklyStorage.makeRequest_('/storage', 'xml', data, workspace);
-};
-
-/**
- * Retrieve XML text from database using given key.
- * @param {string} key Key to XML, obtained from href.
- * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
- */
-BlocklyStorage.retrieveXml = function(key, opt_workspace) {
-  var workspace = opt_workspace || Blockly.getMainWorkspace();
-  BlocklyStorage.makeRequest_('/storage', 'key', key, workspace);
-};
-
-/**
- * Global reference to current AJAX request.
- * @type {XMLHttpRequest}
- * @private
- */
-BlocklyStorage.httpRequest_ = null;
-
-/**
- * Fire a new AJAX request.
- * @param {string} url URL to fetch.
- * @param {string} name Name of parameter.
- * @param {string} content Content of parameter.
- * @param {!Blockly.WorkspaceSvg} workspace Workspace.
- * @private
- */
-BlocklyStorage.makeRequest_ = function(url, name, content, workspace) {
-  if (BlocklyStorage.httpRequest_) {
-    // AJAX call is in-flight.
-    BlocklyStorage.httpRequest_.abort();
-  }
-  BlocklyStorage.httpRequest_ = new XMLHttpRequest();
-  BlocklyStorage.httpRequest_.name = name;
-  BlocklyStorage.httpRequest_.onreadystatechange =
-      BlocklyStorage.handleRequest_;
-  BlocklyStorage.httpRequest_.open('POST', url);
-  BlocklyStorage.httpRequest_.setRequestHeader('Content-Type',
-      'application/x-www-form-urlencoded');
-  BlocklyStorage.httpRequest_.send(name + '=' + encodeURIComponent(content));
-  BlocklyStorage.httpRequest_.workspace = workspace;
-};
-
-/**
- * Callback function for AJAX call.
- * @private
- */
-BlocklyStorage.handleRequest_ = function() {
-  if (BlocklyStorage.httpRequest_.readyState == 4) {
-    if (BlocklyStorage.httpRequest_.status != 200) {
-      BlocklyStorage.alert(BlocklyStorage.HTTPREQUEST_ERROR + '\n' +
-          'httpRequest_.status: ' + BlocklyStorage.httpRequest_.status);
-    } else {
-      var data = BlocklyStorage.httpRequest_.responseText.trim();
-      if (BlocklyStorage.httpRequest_.name == 'xml') {
-        window.location.hash = data;
-        BlocklyStorage.alert(BlocklyStorage.LINK_ALERT.replace('%1',
-            window.location.href));
-      } else if (BlocklyStorage.httpRequest_.name == 'key') {
-        if (!data.length) {
-          BlocklyStorage.alert(BlocklyStorage.HASH_ERROR.replace('%1',
-              window.location.hash));
-        } else {
-          BlocklyStorage.loadXml_(data, BlocklyStorage.httpRequest_.workspace);
-        }
-      }
-      BlocklyStorage.monitorChanges_(BlocklyStorage.httpRequest_.workspace);
+/*
+BlocklyStorage.project = {
+  selectedIndex: 0,
+  name: "テスト",
+  type: "project",
+  children:[
+    {
+      name: "プログラム1",
+      type: "jsxml",
+      xml:"",
     }
-    BlocklyStorage.httpRequest_ = null;
-  }
+  ]
 };
+*/
+// "project.json"
+BlocklyStorage.project = {
+  version: "1.0",
+  selectedIndex: 0,
+	render : [
+		{name: "render", path: "./assets/scene.js"},
+	],
+	modules: [
+		{name: "snowfall", path: "./assets/snowfall.js"},
+		{name: "sphere", path: "./assets/sphere.js"},
+		{name: "pin", path: "./assets/pin.js"},
+		{name: "floor", path: "./assets/floor.js", inactive: true},
+		{name: "grass", path: "./assets/grass.js"},
+		{name: "skydome", path: "./assets/skydome.js"},
+		{name: "light", path: "./assets/light.js"},
+		{name: "box", path: "./assets/cube.js"},
+	],
+	codes: [
+		{name: "background", path: "./assets/background.js"},
+		{name: "demo", path: "./assets/demo.js", inactive: true},
+	],
+	blocks: [
+    {name: "main", path: "./assets/main.xml"},
+	],
+}
 
-/**
- * Start monitoring the workspace.  If a change is made that changes the XML,
- * clear the key from the URL.  Stop monitoring the workspace once such a
- * change is detected.
- * @param {!Blockly.WorkspaceSvg} workspace Workspace.
- * @private
- */
-BlocklyStorage.monitorChanges_ = function(workspace) {
-  var startXmlDom = Blockly.Xml.workspaceToDom(workspace);
-  var startXmlText = Blockly.Xml.domToText(startXmlDom);
-  function change() {
-    var xmlDom = Blockly.Xml.workspaceToDom(workspace);
-    var xmlText = Blockly.Xml.domToText(xmlDom);
-    if (startXmlText != xmlText) {
-      window.location.hash = '';
-      workspace.removeChangeListener(bindData);
-    }
+// ブロックをテキスト形式のＸＭＬで返す。保存可能な形式。
+BlocklyStorage.getWorkspaceXml = function() {
+  var xmlDom = Blockly.Xml.workspaceToDom(Code.workspace);
+  return Blockly.Xml.domToPrettyText(xmlDom);
+}
+// ブロックをテキスト形式のＸＭＬでワークスペースに入れ込む。
+BlocklyStorage.putWorkspaceXml = function(defaultXml) {
+  Code.workspace.clear();
+  var xml = Blockly.Xml.textToDom(defaultXml);
+  Blockly.Xml.domToWorkspace(xml, Code.workspace);
+}
+// ファイル名でファイルを読み出す
+BlocklyStorage.readFile = function(filename) {
+  if ('localStorage' in window && window.localStorage[filename]) {
+    file = window.localStorage[filename]
+    return file;
+  } else {
+    return null; // error
   }
-  var bindData = workspace.addChangeListener(change);
-};
-
-/**
- * Load blocks from XML.
- * @param {string} xml Text representation of XML.
- * @param {!Blockly.WorkspaceSvg} workspace Workspace.
- * @private
- */
-BlocklyStorage.loadXml_ = function(xml, workspace) {
+}
+// ID でプロジェクトをオープンする
+BlocklyStorage.openProject = function(id) {
+  var projectId = id;
+  var project = null;
   try {
-    xml = Blockly.Xml.textToDom(xml);
+    project = JSON.parse(BlocklyStorage.readFile("project.json"));
   } catch (e) {
-    BlocklyStorage.alert(BlocklyStorage.XML_ERROR + '\nXML: ' + xml);
-    return;
+    console.log("cannot restore:");
   }
-  // Clear the workspace to avoid merge.
-  workspace.clear();
-  Blockly.Xml.domToWorkspace(xml, workspace);
-};
+  if (project && project.version == "1.0") {
+    BlocklyStorage.project = project;
+  }
+}
 
-/**
- * Present a text message to the user.
- * Designed to be overridden if an app has custom dialogs, or a butter bar.
- * @param {string} message Text to alert.
- */
-BlocklyStorage.alert = function(message) {
-  window.alert(message);
-};
+BlocklyStorage.read = function(mod){
+  return `<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable >obj</variable>
+  </variables>
+  <block type="three_createNew"  x="88" y="63">
+    <field name="VAR" >obj</field>
+    <value name="VALUE">
+      <shadow type="three_typeName" >
+        <field name="FIELDNAME">sphere</field>
+      </shadow>
+    </value>
+    <next>
+      <block type="three_scene_add" >
+        <field name="VAR" >obj</field>
+        <next>
+          <block type="three_moveForward" >
+            <field name="VAR" >obj</field>
+            <value name="VALUE">
+              <shadow type="math_number" >
+                <field name="NUM">5</field>
+              </shadow>
+            </value>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
+`
+}
+
+// ストレージの初期化＆最後の状態を復旧
+// programMenu DOM
+// canvas DOM
+BlocklyStorage.projectInit = function(initparam) {
+  console.log(" projectInit !")
+
+  // Populate the language selection menu.
+  var programMenu = initparam.selector //: document.getElementById('programMenu'),
+
+  // ワークスペースの初期化
+  //Code.workspace.clear();
+  function saveWorkspace() {
+    //var xmlDom = Blockly.Xml.workspaceToDom(Code.workspace);
+    //var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
+    if (!BlocklyStorage.project.selectedIndex) {
+      BlocklyStorage.project.selectedIndex = 0;
+    }
+    if (BlocklyStorage.project.children) {
+      BlocklyStorage.project.children[BlocklyStorage.project.selectedIndex].xml = BlocklyStorage.getWorkspaceXml();
+    }
+  }
+  function restoreProject() {
+    BlocklyStorage.openProject('new')
+    Blockly.loadProject(initparam.canvas);
+  }
+  restoreProject();
+
+  function updateProgramMenu() {
+    var programs = BlocklyStorage.project.blocks;
+    programMenu.options.length = 0;
+    for (var i = 0; i < programs.length; i++) {
+      var option = new Option(programs[i].name, i);
+      if (i == BlocklyStorage.project.selectedIndex) {
+        option.selected = true;
+      }
+      programMenu.options.add(option);
+    }
+    programMenu.options.add(new Option('（新しく作る）', i));
+  }
+  updateProgramMenu();
+  // unload の時に保存する
+  window.addEventListener('unload', function() {
+    var url = window.location.href.split('#')[0];
+    console.log("backup:", url, BlocklyStorage.project.selectedIndex);
+    //saveWorkspace();
+    if ('localStorage' in window) {
+      //var xml = Blockly.Xml.workspaceToDom(workspace);
+      // Gets the current URL, not including the hash.
+      var url = window.location.href.split('#')[0];
+      window.localStorage.setItem("project.json", JSON.stringify(BlocklyStorage.project));
+     }
+  }
+  , false);
+
+  programMenu.addEventListener('change', function(){
+    console.log("///////////////change")
+    return;
+    var programs = BlocklyStorage.project.children;
+    console.log("change program：", programMenu.selectedIndex);
+    saveWorkspace();
+    BlocklyStorage.project.selectedIndex = programMenu.selectedIndex;
+    if (programs.length < (programMenu.selectedIndex+1)) {
+      console.log("push", programMenu.selectedIndex);
+      programs.push({
+        name: "プログラム"+(programMenu.selectedIndex+1),
+        type: "jsxml",
+        xml:"",
+      });
+      Code.workspace.clear();
+      updateProgramMenu();
+      
+    } else {
+      Blockly.loadBlocks();
+    }
+  }, true);
+
+
+}
+  // project の読み込み
+  Blockly.loadProject = async function (domElement) {
+    console.log("loadBlocks !")
+    var projectJson = BlocklyStorage.project;
+    var pathprefix = "../"
+    // THREE の初期化
+    const render = await import(pathprefix + projectJson.render[0].path);
+    const scene = render.default(domElement);
+  
+    // モジュールをロードする
+    THREE.library = {};
+    projectJson.modules.forEach(async function(mod) {
+      if (!mod.inactive) {
+        var imp = await import(pathprefix + mod.path);
+        THREE.library[mod.name] = imp.default;
+      }
+    });
+  
+    // ソースコードを実行する
+    projectJson.codes.forEach(async function(mod) {
+      if (!mod.inactive) {
+        var group = new THREE.Group();
+        var imp = await import(pathprefix + mod.path);
+        imp.default(group); // 即時実行
+        scene.add(group)
+      }
+    });
+    // canvas を書き直す
+    function redrawCanvas() {
+      var group = new THREE.Group()
+      scene.add(group)
+  
+      THREE.scene = group;
+      window.addEventListener('onreset', function(e) {
+        console.log("onreset!"); // 画面のリセット書き直し
+        scene.remove(group);
+        //delete group;
+        redrawCanvas();
+      }, false);
+    }
+    setTimeout(function() {
+      console.log("redrawCanvas !")
+      redrawCanvas(); // さいしょの一回目呼び出し
+    }, 100);
+    // Blockを読み込む
+    // ソースコードを実行する
+    projectJson.blocks.forEach(async function(mod) {
+      if (!mod.inactive) {
+        var xml = BlocklyStorage.read(mod);
+        BlocklyStorage.putWorkspaceXml( xml );
+
+      }
+    });
+  }

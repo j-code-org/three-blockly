@@ -1,0 +1,104 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable >x</variable>
+    <variable >obj</variable>
+  </variables>
+  <block type="three_onrun"  x="287" y="-87">
+    <statement name="DO">
+      <block type="controls_repeat_ext" >
+        <value name="TIMES">
+          <shadow type="math_number" >
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <statement name="DO">
+          <block type="three_createNew" >
+            <field name="VAR" >obj</field>
+            <value name="VALUE">
+              <shadow type="three_typeName" >
+                <field name="FIELDNAME">sphere</field>
+              </shadow>
+            </value>
+            <next>
+              <block type="three_setColor" >
+                <field name="VAR" >obj</field>
+                <value name="VALUE">
+                  <shadow type="colour_random" />
+                </value>
+                <next>
+                  <block type="three_scene_add" >
+                    <field name="VAR" >obj</field>
+                    <next>
+                      <block type="procedures_callnoreturn" >
+                        <mutation name="MOVE">
+                          <arg name="x"/>
+                        </mutation>
+                        <value name="ARG0">
+                          <block type="variables_get" >
+                            <field name="VAR" >obj</field>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+  <block type="three_beginBlock"  x="688" y="-13"/>
+  <block type="procedures_defnoreturn"  x="312" y="212">
+    <mutation>
+      <arg name="x" var/>
+    </mutation>
+    <field name="NAME">MOVE</field>
+    <comment pinned="false" h="80" w="160">この関数の説明…</comment>
+    <statement name="STACK">
+      <block type="three_lookUpward" >
+        <field name="VAR" >x</field>
+        <value name="VALUE">
+          <shadow type="three_angle">
+            <field name="FIELDNAME">90</field>
+          </shadow>
+          <block type="math_random_int" >
+            <value name="FROM">
+              <shadow type="math_number" >
+                <field name="NUM">0</field>
+              </shadow>
+            </value>
+            <value name="TO">
+              <shadow type="math_number" >
+                <field name="NUM">180</field>
+              </shadow>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="three_moveForward" >
+            <field name="VAR" >x</field>
+            <value name="VALUE">
+              <shadow type="math_number">
+                <field name="NUM">10</field>
+              </shadow>
+              <block type="math_random_int" >
+                <value name="FROM">
+                  <shadow type="math_number" >
+                    <field name="NUM">5</field>
+                  </shadow>
+                </value>
+                <value name="TO">
+                  <shadow type="math_number" >
+                    <field name="NUM">30</field>
+                  </shadow>
+                </value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

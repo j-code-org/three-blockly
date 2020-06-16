@@ -338,16 +338,19 @@ var categoryStyles = {
       media: './media/',
       rtl: Code.isRtl(),
       toolbox: toolboxXml,
-      zoom: {
-        controls: true,
-        wheel: true
+      zoom: {controls: true,
+        wheel: true,
+        startScale: 1.0,
+        maxScale: 3,
+        minScale: 0.3,
+        scaleSpeed: 1.2
       },
       theme: new Blockly.Theme(defaultBlockStyles, categoryStyles),
     }
   );
 
   // カスタムツールボックス
-  Code.workspace.registerToolboxCategoryCallback('JCODE_THREE', JCODE.three.toolbox);
+  Code.workspace.registerToolboxCategoryCallback('JCODE_THREE', JCODE_three_toolbox);
   //Code.workspace.registerToolboxCategoryCallback('JCODE_INSTRUCTION', JCODE.jcodeInstractionCallback);
   
   // Add to reserved word list: Local variables in execution environment (runJS)
@@ -428,10 +431,12 @@ var categoryStyles = {
  * Just a quick and dirty eval.  Catch infinite loops.
  */
 function codeReplace(code) {
+  return code;
   var code = code.replace(/function/g,"async function");
   code = code.replace(/async function mathRandomInt/g,"function mathRandomInt");
   code = code.replace(/async function colourRgb/g,"function colourRgb");
-  return code.replace(/async function colourRandom/g,"function colourRandom");
+  code = code.replace(/async function colourRandom/g,"function colourRandom");
+  return code;
 }
 Code.runJS = function() {
   console.log("Code.runJS");

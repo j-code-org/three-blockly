@@ -20,15 +20,14 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
 
 	<!-- jcode ext -->
-<script>
-//	<script src="./jcode-lib/TextBoardObject.js">
-//	<script src="./jcode-lib/instructions.js">
-</script>
 	<script src="./js/code.js"></script>
-	<script src="./js/jcode.js"></script>
-	<script src="./jcode-lib/obj.js"></script>
-	<script src="./jcode-lib/three.js"></script>
-	</head>
+	<!-- define Blocks -->
+	<script src="./js/asyncproc.js"></script>
+	<script src="./js/baseblocks.js"></script>
+	<script src="./js/movableblocks.js"></script>
+	<!-- storage -->
+	<script src="./js/storage.js"></script>
+</head>
 <body>
 	<audio id="boyoyon1" preload="auto">
 			<source src="./sounds/boyoyon1.mp3" type="audio/mp3">
@@ -120,7 +119,7 @@
 			</article>
 		</div>
 		<div class="tile is-parent is-primary is-paddingless">
-			<div id="content_area" style="position:relative;width:100%;height:300px;"> 	<!-- important -->
+			<div id="content_area" style="position:relative;width:100%;height:500px;"> 	<!-- important -->
 				<div id="content_blocks" class="content"></div>
 				<pre id="content_javascript" class="content"></pre>
 				<textarea id="content_xml" class="content" wrap="off"></textarea>
@@ -168,25 +167,6 @@ function run() {
 	window.dispatchEvent(new Event('onrun'));
 }
 
-const projectJson = {
-	render : [
-		{name: "render", path: "./assets/scene.js"},
-	],
-	modules: [
-		{name: "snowfall", path: "./assets/snowfall.js"},
-		{name: "sphere", path: "./assets/sphere.js"},
-		{name: "pin", path: "./assets/pin.js"},
-		{name: "floor", path: "./assets/floor.js", inactive: true},
-		{name: "grass", path: "./assets/grass.js"},
-		{name: "skydome", path: "./assets/skydome.js"},
-		{name: "light", path: "./assets/light.js"},
-		{name: "box", path: "./assets/cube.js"},
-	],
-	codes: [
-		{name: "background", path: "./assets/background.js"},
-		{name: "demo", path: "./assets/demo.js", inactive: true},
-	],
-}
 
 // Three 描画エリアの初期化
 window.addEventListener('load', async function() {
@@ -197,49 +177,12 @@ window.addEventListener('load', async function() {
 	// Code の初期化
 	Code.initLanguage('languageMenu');
 	Code.initBlockly(toolbox_str);  // Blockly の初期化
-
-	// ソースコードの呼び出し
-	JCODE.projectInit();
-
-	// THREE の初期化
-	const render = await import(projectJson.render[0].path);
-	var domElement = document.getElementById("threejs-canvas");
-	const scene = render.default(domElement);
-
-	// モジュールをロードする
-	THREE.library = {};
-	projectJson.modules.forEach(async function(mod) {
-		if (!mod.inactive) {
-			var imp = await import(mod.path);
-			THREE.library[mod.name] = imp.default;
-		}
+	// プロジェクトの呼び出し
+	BlocklyStorage.projectInit({
+		selector: document.getElementById('programMenu'),
+		canvas: document.getElementById("threejs-canvas"),
 	});
 
-	// ソースコードを実行する
-	projectJson.codes.forEach(async function(mod) {
-		if (!mod.inactive) {
-			var group = new THREE.Group();
-			var imp = await import(mod.path);
-			imp.default(group); // 即時実行
-			scene.add(group)
-		}
-	});
-
-	function redrawCanvas() {
-		var group = new THREE.Group()
-		scene.add(group)
-
-		THREE.scene = group;
-		window.addEventListener('onreset', function(e) {
-			console.log("onreset!"); // 画面のリセット書き直し
-			scene.remove(group);
-			delete group;
-			redrawCanvas();
-		}, false);
-	}
-	setTimeout(function() {
-		redrawCanvas(); // さいしょの一回目呼び出し
-	}, 100);
 })
 </script>
 
@@ -590,6 +533,8 @@ const toolbox_str = `
 			</value>
 		</block>		
 	</category>
+
+	<sep></sep>
 	<category name="3Dオブジェクト(一覧)" colour="%{BKY_MOVABLES_HUE}" custom="JCODE_THREE"></category>
 </xml>
 `

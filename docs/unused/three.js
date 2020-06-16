@@ -128,7 +128,7 @@ JCODE.three.blocks = {
     }
   }
 };
-// Toolbox
+// Toolbox に Three ブロックの一覧を追加
 if (true) {
   // CUSTOM toolbox
   JCODE.three.toolbox = function(workspace) {
@@ -147,7 +147,7 @@ if (true) {
   };
 
 } else {
-  // ブロック一覧
+  // Blockly ブロック一覧
   JCODE.three.toolbox = function(workspace) {
     var xmlList = [];
       var blocks = Blockly.Blocks;
@@ -167,7 +167,7 @@ if (true) {
   };
 
 }
-// Block 定義
+// Three_ Block の生成定義
 (function() {
   var prefix = "three_";
   var obj = JCODE.three.blocks;

@@ -1,7 +1,7 @@
 /*
   ピン
 */
-import movable from "./movable.js"
+import Movable from "./movable.js"
 
 // create a pin
 function loadJson() {
@@ -139,22 +139,20 @@ function loadJson() {
   return loader.parse(jsonobj);
 }
 
-function Pin( color ) {
-
-	movable.call( this );
-	if ( color === undefined ) color = 0xffff00;
-	this.mesh = loadJson();
-	this.colordMesh = this.mesh.getObjectByName("PinCylinder");
-  this.add( this.mesh );
-	this.mesh.castShadow = true;
-
+class Pin extends Movable {
+  constructor(color) {
+    super();
+    if ( color === undefined ) color = 0xffff00;
+    this.mesh = loadJson();
+    this.colordMesh = this.mesh.getObjectByName("PinCylinder");
+    this.add( this.mesh );
+    this.mesh.castShadow = true;
+  }
+  // 色を変える
+  setColor ( color ) {
+    this.colordMesh.material.color.set( color );
+  };
 }
-Pin.prototype = Object.create( movable.prototype );
-Pin.prototype.constructor = Pin;
-// 色を変える
-Pin.prototype.setColor = function ( color ) {
-	this.colordMesh.material.color.set( color );
-};
 
 export default Pin;
 
