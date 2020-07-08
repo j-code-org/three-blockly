@@ -48,9 +48,11 @@ BlocklyStorage.getWorkspaceXml = function() {
 // ブロックをテキスト形式のXMLでワークスペースに入れ込む。
 BlocklyStorage.putWorkspaceXml = function(defaultXml) {
   Code.workspace.clear();
-  var xml = Blockly.Xml.textToDom(defaultXml);
-  Blockly.Xml.domToWorkspace(xml, Code.workspace);
-}
+  if (defaultXml) {
+    var xml = Blockly.Xml.textToDom(defaultXml);
+    Blockly.Xml.domToWorkspace(xml, Code.workspace);
+  }
+ }
 // ファイル名でファイルを読み出す
 BlocklyStorage.readLocalStrage= function(filename) {
   if ('localStorage' in window && window.localStorage[filename]) {
@@ -155,6 +157,8 @@ function updateProgramMenu() {
   }, true);
 }
 
+BlocklyStorage.initparam = null;
+
 // ストレージの初期化＆最後の状態を復旧
 // programMenu DOM
 // canvas DOM
@@ -167,7 +171,8 @@ BlocklyStorage.projectInit = function(initparam) {
   // ワークスペースの初期化
   //Code.workspace.clear();
   BlocklyStorage.openProject(null) // null は「現在のローカルストレージの続き」
-  BlocklyStorage.loadProject(initparam.canvas); // プロジェクトの中身を読み込む
+  BlocklyStorage.initparam = initparam
+  BlocklyStorage.loadProject(BlocklyStorage.initparam.canvas); // プロジェクトの中身を読み込む
 
   // unload の時に保存する
   window.addEventListener('unload', function() {
@@ -176,6 +181,16 @@ BlocklyStorage.projectInit = function(initparam) {
   }
   , false);
 }
+
+// ファイル - 新規
+BlocklyStorage.createnewproject = function(initparam) {
+  console.log(" createnewproject !")
+
+  window.localStorage.clear();  // ローカルストレージをクリア
+  BlocklyStorage.openProject(null) // null は「現在のローカルストレージの続き」
+  BlocklyStorage.loadProject(BlocklyStorage.initparam.canvas); // プロジェクトの中身を読み込む
+}
+
 // project の読み込み
 BlocklyStorage.loadProject = async function (domElement) {
   console.log("loadBlocks !")
