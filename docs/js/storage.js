@@ -183,7 +183,7 @@ BlocklyStorage.projectInit = function(initparam) {
 }
 
 // ファイル - 新規
-BlocklyStorage.createnewproject = function(initparam) {
+BlocklyStorage.createnewproject = function() {
   console.log(" createnewproject !")
 
   window.localStorage.clear();  // ローカルストレージをクリア
